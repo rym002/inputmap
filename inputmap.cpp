@@ -456,7 +456,7 @@ int main2(int argc, char **argv)
     while (!g_exit)
     {
         epoll_event epoll_evs[1];
-        int res = epoll_wait(epoll_fd.get(), epoll_evs, countof(epoll_evs), 10); //TODO conf timeout
+        int res = epoll_wait(epoll_fd.get(), epoll_evs, countof(epoll_evs), -1);
         if (res == -1)
         {
             if (errno == EINTR)
@@ -492,7 +492,10 @@ int main2(int argc, char **argv)
             }
         }
         for (auto &d : deletes)
+        {
             inputs.remove(d);
+            g_exit = true;
+        }
 
         for (auto &v : variables)
             v.second.evaluate();
